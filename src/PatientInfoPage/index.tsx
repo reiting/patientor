@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { setPatientInfo, useStateValue } from '../state';
-import Axios from "axios";
+import axios from "axios";
 import { Icon } from "semantic-ui-react";
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
@@ -13,19 +13,19 @@ const PatientInfoPage = () => {
   useEffect(() => {
     const fetchPatientDetails = async () => {
       try {
-        const { data: patientDetailsFromApi } = await Axios.get<Patient>(
+        const { data: patientDetailsFromApi } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
-
         dispatch(setPatientInfo(patientDetailsFromApi));
-      } catch (e) {
+      }
+      catch (e) {
         console.error(e);
       }
-
-      if (!patient || patient?.id !== id) {
-        fetchPatientDetails();
-      }
     };
+
+    if (!patient || patient?.id !== id) {
+      void fetchPatientDetails();
+    }
   }, [patient, id, dispatch]);
 
   const displayGenderIcon = () => {
